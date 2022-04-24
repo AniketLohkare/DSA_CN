@@ -1,0 +1,54 @@
+#include <cstring>
+#include <iostream>
+using namespace std;
+
+int knapsack(int *weight, int *value, int n, int maxWeight)
+{
+    int **output = new int *[n + 1];
+    for (int i = 0; i <= n; i++)
+        output[i] = new int[maxWeight + 1];
+
+    for (int i = 0; i <= n; i++)
+        output[i][0] = 0;
+
+    for (int i = 0; i <= maxWeight; i++)
+        output[0][i] = 0;
+
+    for (int i = 1; i <= n; i++)
+    {
+        for (int j = 1; j <= maxWeight; j++)
+        {
+            if (j < weight[n - i])
+                output[i][j] = output[i - 1][j];
+            else
+                output[i][j] = max(output[i - 1][j - weight[n - i]] + value[n - i], output[i - 1][j]);
+        }
+    }
+    return output[n][maxWeight];
+}
+
+int main()
+{
+    int n;
+    cin >> n;
+    int *wt = new int[n];
+    int *val = new int[n];
+
+    for (int i = 0; i < n; i++)
+    {
+        cin >> wt[i];
+    }
+
+    for (int j = 0; j < n; j++)
+    {
+        cin >> val[j];
+    }
+
+    int w;
+    cin >> w;
+
+    cout << knapsack(wt, val, n, w) << "\n";
+
+    delete[] wt;
+    delete[] val;
+}
